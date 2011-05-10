@@ -6,3 +6,12 @@ footer .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-
 #btnLectures .ui-icon { background:  url(../images/lectures.png) 50% 50% no-repeat; }
 #btnSpeakers .ui-icon { background:  url(../images/speakers.png) 50% 50% no-repeat; }
 #btnLocations .ui-icon { background:  url(../images/locations.png) 50% 50% no-repeat; }
+
+.ui-content{ margin-top:40px;}
+.ui-controlgroup-horizontal{ text-align:center; }
+#timeTable{ margin:0 0 80px; }
+#timeTable li{ overflow:hidden; padding:9px 5px; }
+.time{ color:#999; display:inline-block;}
+.title{ font-size:11px; display:block; }
+.group{ color:#999; font-size:11px; display:inline-block; margin:0 0 0; float:right;}
+.location{ float:right; }
