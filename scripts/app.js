@@ -33,11 +33,6 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				if(savedSettings){
 					$.extend(settings, savedSettings);
 				}				
-				
-				// Save settings
-				$(window).bind('unload',function(){
-					localStorage.setItem('settings',JSON.stringify(settings));
-				});
 			
 				// Filter schedule
 				$('#filter').delegate('.btnFilter','click',function(){
@@ -51,7 +46,6 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					var text = (settings.filter != '') ? settings.filter : 'filter';
 					$('#input_filter').attr('placeholder',text);
 				});
-				
 				
 				// Render initial schedule
 				$('body').delegate('div[data-role*="page"]', 'pageshow', function(){
@@ -97,6 +91,10 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					label = 'Filter';
 				}
 				
+				// Save settings
+				localStorage.setItem('settings',JSON.stringify(settings));
+				
+				// Change label of filter button
 				$('header .btnFilter .ui-btn-text').text(label);
 				return settings.filter;
 			},

@@ -3,8 +3,8 @@
 .ui-next{ position:absolute; right:10px; top:39px;}
 
 /*=== CONTENT ===*/
-.ui-content{ padding:0; }
-#info .ui-content{ padding: 10px; }
+#lecturesToday .ui-content,#lecturesTomorrow .ui-content,#lecturesAll .ui-content{ padding:0; }
+
 .ui-controlgroup-horizontal{ text-align:center; }
 .timeTable{ margin:0 0; counter-reset:listnumbering; list-style: none; padding: 0;}
 .timeTable li{ overflow:hidden; padding:9px 5px; border-top:1px solid #ccc; background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0.2, rgb(221,221,221)),color-stop(0.8, rgb(238,238,238))); background-image: -moz-linear-gradient(center bottom,rgb(221,221,221) 20%,rgb(238,238,238) 80%);}

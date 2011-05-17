@@ -1,0 +1,15 @@
+CACHE MANIFEST
+
+index.php
+jquery-1.5.2.min.js
+jquery.tmpl.min.js
+jquery.mobile-1.0a4.1.min.js
+jquery.mobile-1.0a4.1.min.css
+
+images/favicon.png
+images/lectures.png
+images/locations.png
+images/startup.png
+images/watch.png
+scripts/app.js
+styles/screen.css
