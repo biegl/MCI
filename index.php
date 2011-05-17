@@ -5,9 +5,9 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-		<meta name="viewport" content="initil-scale=1.0, user-scalable=no" />
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 		<title> MCI Rooms&Lectures</title> 
-		<link rel="apple-touch-icon" href="images/faviconav.png" />
+		<link rel="apple-touch-icon" href="images/favicon.png" />
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
 		<link rel="stylesheet" href="styles/screen.css" />
 		<link type="image/x-icon" rel="shortcut icon" href="favicon.ico">
@@ -32,7 +32,7 @@
 		<footer data-role="footer" data-position="fixed">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lectures">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lectures" class="ui-btn-active">Lectures</a></li>
 					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
 				</ul>
 			</div>
@@ -44,7 +44,7 @@
 		</header>
 		<div data-role="content">
 			<p>Enter a term you would like to filter the schedule for. This can be a <strong>group</strong>, <strong>class</strong> or <strong>location</strong> name.</p>
-			<input type="search" placeholder="filter" id="input_filter"/>
+			<input type="search" placeholder="filter" id="input_filter" />
 			<a href="#lectures" data-role="button" data-theme="b" class="btnFilter">Filter</a>
 			<a href="#lectures" data-role="button" data-rel="back">Cancel</a>
 		</div>

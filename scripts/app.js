@@ -39,10 +39,6 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				// Cache template file
 				$.template('listEntry',markup.singleDay);
 				
-				// Bind lecture button click
-				$('#btnLectures').click(function(){
-				});
-				
 				// Bind next/prev button click
 				$('.ui-prev, .ui-next').click(function(e){
 					e.preventDefault();
@@ -53,27 +49,57 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					} else {
 						action = 1;
 					}
-					_self.updateDay(settings.day + action);
 					
+					_self.updateDay(settings.day + action);
+					_self.refreshSchedule();
 					return false;
 				});
 			
-				
-				// Filter
+				// Filter schedule
 				$('#filter').delegate('.btnFilter','click',function(){
 					var val = $('#input_filter').val();
-					_self.updateFilter(val);
+					_self.updateFilter(val);					
+					_self.refreshSchedule();
 				});
 				
+				// Insert current filter as placeholder in input field
+				$('header .btnFilter').bind('click',function(){
+					var text = (settings.filter != '') ? settings.filter : 'filter';
+					$('#input_filter').attr('placeholder',text);
+				});
+				
+				// Swipe events
+				$('#lectures')
+					.bind('swipeleft',function(event,ui){
+						if(settings.day > 0){
+							$('.ui-next').click();
+						}
+					})
+					.bind('swiperight',function(event,ui){
+						if(settings.day < settings.displayGroup.length){
+							$('.ui-prev').click();
+						}
+					});
 				
 				// Render initial schedule
-				$.when(_self.loadSchedule()).then(function(data){
-					$.when(_self.filterItems(data)).then(function(data){
-						_self.renderItems(data);	
-					});
-				});
-				
+				this.updateDay(settings.day);
+				this.updateFilter(settings.filter);
+				this.refreshSchedule();
 			},
+			/**
+			 * Refreshes the schedule.
+			 * Waits until data is loaded before schedule is rendered.
+			 */
+			refreshSchedule: function(){
+				var _self = this;
+				$.when(_self.loadSchedule()).then(function(data){
+					_self.renderItems(_self.filterItems(data));
+				});
+			},
+			/**
+			 * Updates the setting filter and replaces the label of the filter button
+			 * @param filter: String Text to filter for
+			 **/
 			updateFilter: function(filter){
 				var label = '';
 				settings.filter = filter;
@@ -87,11 +113,19 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				$('header .btnFilter .ui-btn-text').text(label);
 				return settings.filter;
 			},
+			/**
+			 * Updates the setting day.
+			 * Day has to be within the specified settings.displayGroup Array.
+			 * Handles the display behavior of prev/next buttons.
+			 * @param day: Integer The number serves as Array index for settings.displayGroup
+			 **/
 			updateDay: function(day){
 				if(day < 0){
 					settings.day = 0;
 				} else if(day > settings.displayGroup.length){
 					settings.day = settings.displayGroup.length;
+				} else {
+					settings.day = day;
 				}
 				
 				$('.ui-prev,.ui-next').show();
@@ -106,6 +140,10 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				$('#lectures header h2').text(settings.displayGroup[day]);
 				return settings.day;
 			},
+			/**
+			 * Returns the current Day in the format ('dd.mm').
+			 * @param addDays: Integer Add days to current date.
+			 **/
 			returnDate: function(addDays){
 				var date = new Date();
 				addDays = parseInt(addDays,10);
@@ -115,6 +153,10 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				}
 				return date.format('d.m.');
 			},
+			/**
+			 * Checks whether an offline version of the schedule is available.
+			 * If so, the cached data is returned, otherwise an AJAX call is made.
+			 */
 			loadSchedule: function(){
 				var curTime = new Date(),
 						_self = this;
@@ -122,22 +164,21 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				curTime = curTime.getTime();
 				var storage = localStorage.getItem('schedule'),
 						schedule = $.parseJSON(storage);
-				
-				if(!schedule || schedule.timeStamp < (curTime - 21600)) {
-					$.getJSON(url, function(data){
-						if(data){
-							var schedule = {
-								'timeStamp': curTime,
-								'classes': data
-							}
-							localStorage.setItem('schedule',JSON.stringify(schedule));
-							return data;	
-						}
-					});
-				} else {
-					return schedule.classes;
-				}				
+						
+				return (schedule && schedule.timeStamp > (curTime - 21600)) ? schedule.classes : $.getJSON(url,function(data){
+					var schedule = {
+						'timeStamp': curTime,
+						'classes': data
+					};
+					localStorage.setItem('schedule',JSON.stringify(schedule));
+					return data;
+				});
 			},
+			/**
+			 * Filters the schedule according to the adjusted day and filter values
+			 * Returns a new Array with filtered items.
+			 * @param data: Array Array with all classes as JSON Objects
+			 **/
 			filterItems: function(data){
 				var day = settings.day,
 						f = settings.filter,
@@ -148,7 +189,6 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					var d1 = _self.returnDate(),
 							d2 = _self.returnDate(1);
 							
-					console.log(data);
 					data = $.map(data,function(value,index){
 						if(day == 0){
 							check = (value.date === d1) ? true : false;
@@ -167,6 +207,7 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					});	
 				}
 				
+				// Notify the user in case no classes are available on specified date.
 				if(data.length == 0){
 					var obj = {
 						title: "No classes available for requested date!",
@@ -181,7 +222,7 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				return data;
 			},
 			/**
-			 * Render items to display
+			 * Render items to display.
 			 * @param data
 			 */
 			renderItems: function(data){
