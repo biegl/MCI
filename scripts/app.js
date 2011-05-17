@@ -14,7 +14,8 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				$lAll = $('#lecturesAll .timeTable'),
 				theme = 'c',
 				markup = {
-					singleDay: '<li><span class="time">${from} - ${to}</span><span class="location">${location} ${room}</span><span class="title">${title}</span><span class="group">${group}</span></li>'
+					singleDay: '<li><span class="time">${from} - ${to}</span><span class="location">${location} ${room}</span><span class="title">${title}</span><span class="group">${group}</span></li>',
+					all: '<li data-role="list-divider">${date}</li>${{tmpl "listEntry"}}'
 				};
 				
 		var settings = {
@@ -37,9 +38,6 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				$(window).bind('unload',function(){
 					localStorage.setItem('settings',JSON.stringify(settings));
 				});
-				
-				// Cache template file
-				$.template('listEntry',markup.singleDay);
 			
 				// Filter schedule
 				$('#filter').delegate('.btnFilter','click',function(){
@@ -80,9 +78,9 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 			refreshSchedule: function(){
 				var _self = this;
 				$.when(_self.loadSchedule()).then(function(data){
-					_self.renderItems($lToday,'listEntry',_self.filterItems(data,0));
-					_self.renderItems($lTomorrow,'listEntry',_self.filterItems(data,1));
-					_self.renderItems($lAll,'listEntry',_self.filterItems(data,2));
+					_self.renderItems($lToday,'#listEntry',_self.filterItems(data,0));
+					_self.renderItems($lTomorrow,'#listEntry',_self.filterItems(data,1));
+					_self.renderItems($lAll,'#listAll',_self.filterItems(data,2));
 				});
 			},
 			/**
@@ -186,7 +184,19 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 			 * @param data
 			 */
 			renderItems: function(target,template,data){
-				target.html($.tmpl(template,data));
+				$.when(target.html($(template).tmpl(data))).then(function(resp){
+					var $divider = $('#lecturesAll li.ui-li-divider'),
+							date = '';
+					if ($divider.length){
+						$divider.each(function(){
+							if(date == $(this).text()){
+								$(this).remove();
+							} else {
+								date = $(this).text();
+							}
+						});
+					}
+				});
 			} 
 		};
 		

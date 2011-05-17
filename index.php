@@ -18,12 +18,12 @@
 		<script src="scripts/app.js"></script>
 </head>
 <body>
-	<div id="lecturesToday" data-role="page" data-fullscreen="true">
+	<div id="lecturesToday" data-role="page">
 		<!-- content today -->
 		<header data-role="header" data-position="fixed" data-id="head">
 			<h1>Rooms & Lectures</h1>
 			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter">Filter</a>
-			<a href="#info" data-icon="info" data-iconpos="notext">Info</a>
+			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog">Info</a>
 			<h2>Today</h2>
 			<a href="#lecturesTomorrow" data-icon="arrow-r" data-iconpos="notext" class="ui-next" data-transition="slide">Next</a>
 		</header>
@@ -33,17 +33,17 @@
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lectures" class="ui-btn-active">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" class="ui-btn-active">Lectures</a></li>
 					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
 				</ul>
 			</div>
 		</footer>
 	</div><!-- end lectures Today -->
-	<div id="lecturesTomorrow" data-role="page" data-fullscreen="true" data-id="head">
-		<header data-role="header" data-position="fixed">
+	<div id="lecturesTomorrow" data-role="page" data-id="head">
+		<header data-role="header">
 			<h1>Rooms & Lectures</h1>
 			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter">Filter</a>
-			<a href="#info" data-icon="info" data-iconpos="notext">Info</a>
+			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog">Info</a>
 			<a href="#lecturesToday" data-icon="arrow-l" data-iconpos="notext" class="ui-prev" data-transition="reverse slide">Previous</a>
 			<h2>Tomorrow</h2>
 			<a href="#lecturesAll" data-icon="arrow-r" data-iconpos="notext" class="ui-next" data-transition="slide">Next</a>
@@ -54,17 +54,17 @@
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lectures" class="ui-btn-active">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" class="ui-btn-active">Lectures</a></li>
 					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
 				</ul>
 			</div>
 		</footer>
 	</div><!-- end lectures Tomorrow -->
-	<div id="lecturesAll" data-role="page" data-fullscreen="true" data-id="head">
-		<header data-role="header" data-position="fixed">
+	<div id="lecturesAll" data-role="page" data-id="head">
+		<header data-role="header">
 			<h1>Rooms & Lectures</h1>
 			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter">Filter</a>
-			<a href="#info" data-icon="info" data-iconpos="notext">Info</a>
+			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog">Info</a>
 			<a href="#lecturesTomorrow" data-icon="arrow-l" data-iconpos="notext" class="ui-prev" data-transition="reverse slide">Previous</a>
 			<h2>All</h2>
 		</header>
@@ -74,12 +74,38 @@
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lectures" class="ui-btn-active">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" class="ui-btn-active">Lectures</a></li>
 					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
 				</ul>
 			</div>
 		</footer>
 	</div><!-- end lectures All -->	
+	<div id="info" data-role="page">
+		<header data-role="header">
+			<h1>Information</h1>
+		</header>
+		<div data-role="content">
+			<h2>MCI Application</h2>
+			<ul class="no-bullets">
+				<li><label>Version: </label>0.1</li>
+				<li><label>Date: </label>May 17, 2011</li>
+				<li><label>Author: </label>Markus Bürgler</li>
+				<li><label>Mail: </label><a href="mailto:markus.buergler@solito.at">m.buergler@solito.at</a></li>
+			</ul>
+			<p>This application is a solito KG product.<br />
+			<address>
+				<strong>solito KG</strong><br />
+				Adamgasse 7<br />
+				6020 Innsbruck <br />
+				Austria<br />
+				<a href="http://www.solito.at">http://www.solito.at</a>
+			</address>
+			<blockquote>"ALL the web! The web for ALL!"</blockquote>
+			</p>
+		</div>
+		<footer data-role="footer" data-position="fixed">
+		</footer>
+	</div>
 	<div id="filter" data-role="page">
 		<header data-role="header" data-position="fixed">
 			<h1>Filter</h1>
@@ -93,5 +119,12 @@
 		<footer data-role="footer" data-position="fixed">
 		</footer>
 	</div><!-- end search -->
+	<script id="listEntry" type="text/x-jquery-tmpl">
+	    <li><span class="time">${from} - ${to}</span><span class="location">${location} ${room}</span><span class="title">${title}</span><span class="group">${group}</span></li>
+	</script>
+	<script id="listAll" type="text/x-jquery-tmpl">
+				<li class="ui-li-divider ui-body-a">${date}</li>
+			{{tmpl "#listEntry"}}
+	</script>
 </body>
 </html>
