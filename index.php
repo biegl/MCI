@@ -5,14 +5,15 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="viewport" content="initil-scale=1.0, user-scalable=no" />
 		<title> MCI Rooms&Lectures</title> 
-		<link rel="apple-touch-icon" href="img/tutsTouchIcon.png" />
+		<link rel="apple-touch-icon" href="images/faviconav.png" />
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
 		<link rel="stylesheet" href="styles/screen.css" />
+		<link type="image/x-icon" rel="shortcut icon" href="favicon.ico">
 		<script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
 		<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
-		<script src="scripts/storage.js"></script>
 		<script src="scripts/app.js"></script>
 </head>
 <body>

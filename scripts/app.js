@@ -16,71 +16,68 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				};
 				
 		var settings = {
-			filter: ['Today','Tomorrow','All'],
-			curFilter: 0,	// 0 => Today, 1 => Tomorrow, 2 => All
-			filterDay: '',
-			filterText: ''
+			displayGroup: ['Today','Tomorrow','All'],
+			day: 0,	// 0 => Today, 1 => Tomorrow, 2 => All
+			filter: ''
 		};		
 		
 		var app = {
 			init: function(){
-				var _self = this;
-				if(localStorage.getItem('filterDay')){
-					settings.curFilter = parseInt(localStorage.getItem('filterDay'),10);
-				}
+				var _self = this,
+						savedSettings = $.parseJSON(localStorage.getItem('settings'));
+				
+				// Load settings
+				if(savedSettings){
+					$.extend(settings, savedSettings);
+				}				
+				
+				// Save settings
+				$(window).bind('unload',function(){
+					localStorage.setItem('settings',JSON.stringify(settings));
+				});
+				
 				// Cache template file
 				$.template('listEntry',markup.singleDay);
 				
 				// Bind lecture button click
 				$('#btnLectures').click(function(){
-					_self.loadSchedule();
-				}).click();
+				});
 				
 				// Bind next/prev button click
 				$('.ui-prev, .ui-next').click(function(e){
 					e.preventDefault();
-					var action = "";
+					var action = 0;
+					
 					if($(this).hasClass('ui-prev')){
 						action = -1;
 					} else {
 						action = 1;
 					}
-					
-					settings.curFilter = settings.curFilter + action;
-					if(settings.curFilter < 0){
-						settings.curFilter = 0;
-					} else if(settings.curFilter>settings.filter.length){
-						settings.curFilter = settings.filter.length;
-					}
-					
-					localStorage.setItem('filterDay',settings.curFilter);
-					_self.updateFilterDay(settings.curFilter);
+					_self.updateDay(settings.day + action);
 					
 					return false;
 				});
-				
-				$timeTable.listview({
-					theme: theme,
-					countTheme: theme,
-					headerTheme: theme,
-					dividerTheme: theme,
-					splitTheme: theme
-				});
+			
 				
 				// Filter
 				$('#filter').delegate('.btnFilter','click',function(){
 					var val = $('#input_filter').val();
-					localStorage.setItem('filterText',val);
-					_self.updateFilterText(val);
+					_self.updateFilter(val);
 				});
 				
-				// Load settings
-				_self.updateFilterText(localStorage.getItem('filterText'));
-				_self.updateFilterDay(localStorage.getItem('filterDay'));
+				
+				// Render initial schedule
+				$.when(_self.loadSchedule()).then(function(data){
+					$.when(_self.filterItems(data)).then(function(data){
+						_self.renderItems(data);	
+					});
+				});
+				
 			},
-			updateFilterText: function(filter){
-				settings.filterText = filter;
+			updateFilter: function(filter){
 				var label = '';
+				settings.filter = filter;
+				
 				if(filter != ''){
 					label = filter;
 				} else {
@@ -88,18 +85,26 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				}
 				
 				$('header .btnFilter .ui-btn-text').text(label);
-				this.renderItems();
+				return settings.filter;
 			},
-			updateFilterDay: function(curFilter){
+			updateDay: function(day){
+				if(day < 0){
+					settings.day = 0;
+				} else if(day > settings.displayGroup.length){
+					settings.day = settings.displayGroup.length;
+				}
+				
 				$('.ui-prev,.ui-next').show();
-				if(curFilter < 1){
+				
+				if(day < 1){
 					$('.ui-prev').hide();
-				} else if(curFilter >= settings.filter.length - 1 ) {
+				} else if(day >= settings.displayGroup.length - 1 ) {
 					$('.ui-next').hide();
 				}
 
-				$('#lectures header h2').text(settings.filter[curFilter]);
-				this.renderItems();
+				
+				$('#lectures header h2').text(settings.displayGroup[day]);
+				return settings.day;
 			},
 			returnDate: function(addDays){
 				var date = new Date();
@@ -126,49 +131,60 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 								'classes': data
 							}
 							localStorage.setItem('schedule',JSON.stringify(schedule));
-							return schedule.classes;	
+							return data;	
 						}
 					});
 				} else {
 					return schedule.classes;
 				}				
 			},
-			
-			/**
-			 * Render items to display
-			 * @param data
-			 */
-			renderItems: function(){
-				var day = localStorage.getItem('filterDay'),
-						data = this.loadSchedule(),
-						f = settings.filterText,
+			filterItems: function(data){
+				var day = settings.day,
+						f = settings.filter,
 						check = false,
+						check2 = false,
 						_self = this;
-				
 				if(day == 0 || day == 1 || f != ''){
+					var d1 = _self.returnDate(),
+							d2 = _self.returnDate(1);
+							
+					console.log(data);
 					data = $.map(data,function(value,index){
 						if(day == 0){
-							check = (value.date === _self.returnDate()) ? true : false;
+							check = (value.date === d1) ? true : false;
 						}else if(day == 1){
-							check = (value.date === _self.returnDate(1)) ? true : false;
+							check = (value.date === d2) ? true : false;
 						} else {
 							check = true;
 						}
-						return (check === true && (value.title.indexOf(f) > -1 || value.group.indexOf(f) > -1 || value.location.indexOf(f) > -1 )) ? value : null
+						
+						if(f != null){
+							check2 = (value.title.indexOf(f) > -1 || value.group.indexOf(f) > -1 || value.location.indexOf(f) > -1 ) ? true : false;
+						} else {
+							check2 = true;
+						}
+						return (check === true && check2 === true) ? value : null
 					});	
 				}
 				
 				if(data.length == 0){
 					var obj = {
-						title: "No class available for requested date!",
+						title: "No classes available for requested date!",
 						location: "MCI",
-						group: settings.filterText,
+						group: settings.filter,
 						from: "00:00",
 						to: "24:00"
 					}
 					data.push(obj);
 				}
 				
+				return data;
+			},
+			/**
+			 * Render items to display
+			 * @param data
+			 */
+			renderItems: function(data){
 				$timeTable.html($.tmpl('listEntry',data));
 			} 
 		};
