@@ -5,9 +5,9 @@
 /*=== CONTENT ===*/
 .ui-content{ margin-top:71px;}
 .ui-controlgroup-horizontal{ text-align:center; }
-#timeTable{ margin:0 0 61px; counter-reset:listnumbering; list-style: none; padding: 0;}
-#timeTable li{ overflow:hidden; padding:9px 5px; border-top:1px solid #ccc; background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0.2, rgb(221,221,221)),color-stop(0.8, rgb(238,238,238))); background-image: -moz-linear-gradient(center bottom,rgb(221,221,221) 20%,rgb(238,238,238) 80%);}
-#timeTable li:last-child{border-bottom:1px solid #ccc;}
+.timeTable{ margin:0 0 61px; counter-reset:listnumbering; list-style: none; padding: 0;}
+.timeTable li{ overflow:hidden; padding:9px 5px; border-top:1px solid #ccc; background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0.2, rgb(221,221,221)),color-stop(0.8, rgb(238,238,238))); background-image: -moz-linear-gradient(center bottom,rgb(221,221,221) 20%,rgb(238,238,238) 80%);}
+.timeTable li:last-child{border-bottom:1px solid #ccc;}
 .time{ color:#999; display:inline-block;}
 .title{ clear:both; float:left; font-size:11px; display:block; }
 .group{ color:#999; font-size:11px; display:inline-block; margin:0 0 0; float:right;}

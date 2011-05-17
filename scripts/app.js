@@ -9,7 +9,9 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 (function($){
 	$(function(){
 		var url = 'app/schedule.php',
-				$timeTable = $('#timeTable'),
+				$lToday = $('#lecturesToday .timeTable'),
+				$lTomorrow = $('#lecturesTomorrow .timeTable'),
+				$lAll = $('#lecturesAll .timeTable'),
 				theme = 'c',
 				markup = {
 					singleDay: '<li><span class="time">${from} - ${to}</span><span class="location">${location} ${room}</span><span class="title">${title}</span><span class="group">${group}</span></li>'
@@ -38,22 +40,6 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				
 				// Cache template file
 				$.template('listEntry',markup.singleDay);
-				
-				// Bind next/prev button click
-				$('.ui-prev, .ui-next').click(function(e){
-					e.preventDefault();
-					var action = 0;
-					
-					if($(this).hasClass('ui-prev')){
-						action = -1;
-					} else {
-						action = 1;
-					}
-					
-					_self.updateDay(settings.day + action);
-					_self.refreshSchedule();
-					return false;
-				});
 			
 				// Filter schedule
 				$('#filter').delegate('.btnFilter','click',function(){
@@ -68,21 +54,22 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					$('#input_filter').attr('placeholder',text);
 				});
 				
-				// Swipe events
-				$('#lectures')
-					.bind('swipeleft',function(event,ui){
-						if(settings.day > 0){
-							$('.ui-next').click();
-						}
-					})
-					.bind('swiperight',function(event,ui){
-						if(settings.day < settings.displayGroup.length){
-							$('.ui-prev').click();
-						}
-					});
 				
 				// Render initial schedule
-				this.updateDay(settings.day);
+				$('body').delegate('div[data-role*="page"]', 'pageshow', function(){
+					_self.updateFilter(settings.filter);
+				});
+				
+				$('body').delegate('div[data-role*="page"]','swipeleft swiperight',function(e){
+					var direction = e.type;
+					
+					if(direction == 'swiperight'){
+						$('header .ui-prev',$(this)).click();
+					} else {
+						$('header .ui-next',$(this)).click();
+					}
+				});
+				
 				this.updateFilter(settings.filter);
 				this.refreshSchedule();
 			},
@@ -93,7 +80,9 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 			refreshSchedule: function(){
 				var _self = this;
 				$.when(_self.loadSchedule()).then(function(data){
-					_self.renderItems(_self.filterItems(data));
+					_self.renderItems($lToday,'listEntry',_self.filterItems(data,0));
+					_self.renderItems($lTomorrow,'listEntry',_self.filterItems(data,1));
+					_self.renderItems($lAll,'listEntry',_self.filterItems(data,2));
 				});
 			},
 			/**
@@ -112,33 +101,6 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				
 				$('header .btnFilter .ui-btn-text').text(label);
 				return settings.filter;
-			},
-			/**
-			 * Updates the setting day.
-			 * Day has to be within the specified settings.displayGroup Array.
-			 * Handles the display behavior of prev/next buttons.
-			 * @param day: Integer The number serves as Array index for settings.displayGroup
-			 **/
-			updateDay: function(day){
-				if(day < 0){
-					settings.day = 0;
-				} else if(day > settings.displayGroup.length){
-					settings.day = settings.displayGroup.length;
-				} else {
-					settings.day = day;
-				}
-				
-				$('.ui-prev,.ui-next').show();
-				
-				if(day < 1){
-					$('.ui-prev').hide();
-				} else if(day >= settings.displayGroup.length - 1 ) {
-					$('.ui-next').hide();
-				}
-
-				
-				$('#lectures header h2').text(settings.displayGroup[day]);
-				return settings.day;
 			},
 			/**
 			 * Returns the current Day in the format ('dd.mm').
@@ -179,33 +141,31 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 			 * Returns a new Array with filtered items.
 			 * @param data: Array Array with all classes as JSON Objects
 			 **/
-			filterItems: function(data){
-				var day = settings.day,
-						f = settings.filter,
-						check = false,
-						check2 = false,
+			filterItems: function(data,day){
+				var f = settings.filter,
+						date = '',
+						checkFilter = true,
+						checkDate = true,
 						_self = this;
-				if(day == 0 || day == 1 || f != ''){
-					var d1 = _self.returnDate(),
-							d2 = _self.returnDate(1);
-							
-					data = $.map(data,function(value,index){
-						if(day == 0){
-							check = (value.date === d1) ? true : false;
-						}else if(day == 1){
-							check = (value.date === d2) ? true : false;
-						} else {
-							check = true;
-						}
-						
-						if(f != null){
-							check2 = (value.title.indexOf(f) > -1 || value.group.indexOf(f) > -1 || value.location.indexOf(f) > -1 ) ? true : false;
-						} else {
-							check2 = true;
-						}
-						return (check === true && check2 === true) ? value : null
-					});	
+				
+				if(day == 0 || day == 1){
+					date = _self.returnDate(day);
 				}
+				
+				
+				data = $.map(data, function(value,index){
+					if(day != 2){
+						checkDate = (value.date === date) ? true : false;
+					}
+					
+					if(f != null){
+						checkFilter = (value.title.indexOf(f) > -1 || value.group.indexOf(f) > -1 || value.location.indexOf(f) > -1 ) ? true : false;
+					} else {
+						checkFilter = true;
+					}
+					
+					return (checkDate === true && checkFilter === true) ? value : null;
+				});
 				
 				// Notify the user in case no classes are available on specified date.
 				if(data.length == 0){
@@ -225,8 +185,8 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 			 * Render items to display.
 			 * @param data
 			 */
-			renderItems: function(data){
-				$timeTable.html($.tmpl('listEntry',data));
+			renderItems: function(target,template,data){
+				target.html($.tmpl(template,data));
 			} 
 		};
 		
