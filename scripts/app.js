@@ -12,11 +12,7 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				$lToday = $('#lecturesToday .timeTable'),
 				$lTomorrow = $('#lecturesTomorrow .timeTable'),
 				$lAll = $('#lecturesAll .timeTable'),
-				theme = 'c',
-				markup = {
-					singleDay: '<li><span class="time">${from} - ${to}</span><span class="location">${location} ${room}</span><span class="title">${title}</span><span class="group">${group}</span></li>',
-					all: '<li data-role="list-divider">${date}</li>${{tmpl "listEntry"}}'
-				};
+				theme = 'c';
 				
 		var settings = {
 			displayGroup: ['Today','Tomorrow','All'],
@@ -184,13 +180,20 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 			renderItems: function(target,template,data){
 				$.when(target.html($(template).tmpl(data))).then(function(resp){
 					var $divider = $('#lecturesAll li.ui-li-divider'),
-							date = '';
+							date = '',
+							today = new Date();
+							
 					if ($divider.length){
 						$divider.each(function(){
 							if(date == $(this).text()){
 								$(this).remove();
 							} else {
-								date = $(this).text();
+								var text = $(this).text(),
+										day = text.substring(0,2);
+										
+								date = text;
+								today.setDate(day);
+								$(this).text(today.format('l') + ' ' + text); 
 							}
 						});
 					}
