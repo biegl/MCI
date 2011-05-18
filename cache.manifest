@@ -1,11 +1,12 @@
 CACHE MANIFEST
 
 index.php
-jquery-1.5.2.min.js
-jquery.tmpl.min.js
-jquery.mobile-1.0a4.1.min.js
-jquery.mobile-1.0a4.1.min.css
-
+http://code.jquery.com/jquery-1.5.2.min.js
+http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js
+http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js
+http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css
+http://code.jquery.com/mobile/1.0a4.1/images/ajax-loader.png
+http://code.jquery.com/mobile/1.0a4.1/images/icons-18-white.png
 images/favicon.png
 images/lectures.png
 images/locations.png
@@ -13,3 +14,6 @@ images/startup.png
 images/watch.png
 scripts/app.js
 styles/screen.css
+
+NETWORK:
+app/schedule.php
