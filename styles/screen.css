@@ -28,3 +28,6 @@ footer .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-
 
 #btnLectures .ui-icon { background:  url(../images/lectures.png) 50% 50% no-repeat; }
 #btnLocations .ui-icon { background:  url(../images/locations.png) 50% 50% no-repeat; }
+
+/*=== LOCATIONS ===*/
+#map_canvas{ width:100%; height:100%; }

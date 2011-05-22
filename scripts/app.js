@@ -14,10 +14,47 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				$lAll = $('#lecturesAll .timeTable'),
 				theme = 'c';
 				
-		var settings = {
+		 settings = {
 			displayGroup: ['Today','Tomorrow','All'],
 			day: 0,	// 0 => Today, 1 => Tomorrow, 2 => All
-			filter: ''
+			filter: '',
+			locations: [
+			  {
+					'name': 'MCI 1',
+					'lat': 47.269208,
+					'lng': 11.398152,
+					'address': 'Universitätsstraße 15',
+					'tel': '+43 512 2070'
+				},
+				{
+					'name': 'MCI 2',
+					'lat': 47.269379,
+					'lng': 11.397084,
+					'address': 'Universitätsstraße 15',
+					'tel': '+43 512 2070'
+				},
+				{
+					'name': 'MCI 3',
+					'lat': 47.279148,
+					'lng': 11.397728,
+					'address': 'Weiherburggasse 8',
+					'tel': '+43 512 2070 3301'
+				},
+				{
+					'name': 'MCI 4',
+					'lat': 47.255031,
+					'lng': 11.37935,
+					'address': 'Egger-Lienz-Straße 120',
+					'tel': '+43 512 2070 3200'
+				},
+				{
+					'name': 'MCI 5',
+					'lat': 47.2703,
+					'lng': 11.402942,
+					'address': 'Kapuzinergasse 9',
+					'tel': '+43 512 2070 1005'
+				}
+			]
 		};		
 		
 		var app = {
@@ -56,6 +93,11 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					} else {
 						$('header .ui-next',$(this)).click();
 					}
+				});
+				
+				// Init map
+				$('#btnLocations').live('click', function(event){
+					_self.initMap(settings.locations);
 				});
 				
 				this.updateFilter(settings.filter);
@@ -151,7 +193,8 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					}
 					
 					if(f != null){
-						checkFilter = (value.title.indexOf(f) > -1 || value.group.indexOf(f) > -1 || value.location.indexOf(f) > -1 ) ? true : false;
+						f = f.toLowerCase();
+						checkFilter = (value.title.toLowerCase().indexOf(f) > -1 || value.group.toLowerCase().indexOf(f) > -1 || value.lecturer.toLowerCase().indexOf(f) > -1 || value.location.toLowerCase().indexOf(f) > -1 ) ? true : false;
 					} else {
 						checkFilter = true;
 					}
@@ -198,7 +241,52 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 						});
 					}
 				});
-			} 
+			},
+			initMap: function(locations) {
+				var ow = null;
+				var image = new google.maps.MarkerImage(
+					'images/marker.png',
+					new google.maps.Size(25,25),
+					new google.maps.Point(0,0),
+					new google.maps.Point(12,12)
+					);
+				 
+				var shadow = new google.maps.MarkerImage(
+					'images/marker_shadow.png',
+					new google.maps.Size(78,50),
+					new google.maps.Point(0,0),
+					new google.maps.Point(12,12)
+					);
+				
+				
+					$('#map_canvas').gmap({ 'center': new google.maps.LatLng(47.26215,11.39180),'zoom': 13, 'callback': function() {
+						var $map = $('#map_canvas');
+						$.each(locations,function(i,loc){
+							var text = $('#infoWindow').tmpl(loc).html();
+							$map.gmap('addMarker', { 'title': loc.name, 'position': new google.maps.LatLng(loc.lat,loc.lng), 'animation': google.maps.Animation.DROP, 'icon': image, 'shadow': shadow }, function(map, marker){
+								$map.gmap('addInfoWindow', { 'position':marker.getPosition(), 'content': text }, function(iw) {
+									$(marker).click(function() {
+										if(ow){
+											ow.close();
+										}
+										iw.open(map, marker);
+										ow = iw;
+										map.panTo(marker.getPosition());
+									});
+								});
+							});
+						});
+						
+						// My location
+						if(navigator.geolocation){
+							navigator.geolocation.getCurrentPosition(function(pos){
+								$map.gmap('addMarker',{'position':new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude),'title':'My position'});
+							},function(){
+								alert('Geolocation not supported!');
+							});
+						}
+					}});
+			}
 		};
 		
 		app.init();

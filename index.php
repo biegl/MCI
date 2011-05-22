@@ -27,7 +27,7 @@
 			<h2>Today</h2>
 			<a href="#lecturesTomorrow" data-icon="arrow-r" data-iconpos="notext" class="ui-next" data-transition="slide">Next</a>
 		</header>
-		<div data-role="content" id="contentToday" data-url="#contentToday">
+		<div data-role="content">
 			<ul class="timeTable" data-filter="true"></ul>
 		</div>
 		<footer data-role="footer" data-position="fixed" data-id="foot">
@@ -48,7 +48,7 @@
 			<h2>Tomorrow</h2>
 			<a href="#lecturesAll" data-icon="arrow-r" data-iconpos="notext" class="ui-next" data-transition="slide">Next</a>
 		</header>
-		<div data-role="content" id="contentToday" data-url="#contentToday">
+		<div data-role="content">
 			<ul class="timeTable" data-filter="true"></ul>
 		</div>
 		<footer data-role="footer" data-position="fixed" data-id="foot">
@@ -68,7 +68,7 @@
 			<a href="#lecturesTomorrow" data-icon="arrow-l" data-iconpos="notext" class="ui-prev" data-transition="reverse slide">Previous</a>
 			<h2>All</h2>
 		</header>
-		<div data-role="content" id="contentToday" data-url="#contentToday">
+		<div data-role="content">
 			<ul class="timeTable" data-filter="true"></ul>
 		</div>
 		<footer data-role="footer" data-position="fixed" data-id="foot">
@@ -80,6 +80,25 @@
 			</div>
 		</footer>
 	</div><!-- end lectures All -->	
+	<div id="locations" data-role="page" style="width:100%; height: 100%;">
+		<!-- content today -->
+		<header data-role="header" data-position="fixed" data-id="head">
+			<h1>Locations</h1>
+			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter">Filter</a>
+			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog">Info</a>	
+		</header>
+		<div data-role="content" style="padding:0;height:100%;width:100%;">
+			<div id="map_canvas"></div>
+		</div>
+		<footer data-role="footer" data-position="fixed" data-id="foot">
+			<div data-role="navbar">
+				<ul>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" data-transition="reverse slide">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLocations" href="#locations" class="ui-btn-active">Locations</a></li>
+				</ul>
+			</div>
+		</footer>
+	</div><!-- end page locations -->
 	<div id="info" data-role="page">
 		<header data-role="header">
 			<h1>Information</h1>
@@ -105,7 +124,8 @@
 		</div>
 		<footer data-role="footer" data-position="fixed">
 		</footer>
-	</div>
+	</div><!-- end page info -->
+	
 	<div id="filter" data-role="page">
 		<header data-role="header" data-position="fixed">
 			<h1>Filter</h1>
@@ -126,5 +146,16 @@
 				<li class="ui-li-divider ui-body-a">${date}</li>
 			{{tmpl "#listEntry"}}
 	</script>
+	<script id="infoWindow" type="text/x-jquery-tmpl">
+			<div>
+				<div id="siteNotice"></div>
+				<h2 id="firstHeading" class="firstHeading">${name}</h2>
+				<div id="bodyContent">
+					<address>${address}<br/>${tel}</address>
+				</div>
+			</div>
+	</script>
+	<script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
+	<script src="scripts/jquery.ui.map.min.js"></script>
 </body>
 </html>

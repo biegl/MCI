@@ -16,4 +16,5 @@ scripts/app.js
 styles/screen.css
 
 NETWORK:
+*
 app/schedule.php
