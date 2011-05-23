@@ -89,6 +89,7 @@
 		</header>
 		<div data-role="content" style="padding:0;height:100%;width:100%;">
 			<div id="map_canvas"></div>
+			<div id="results"></div>
 		</div>
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
@@ -153,9 +154,9 @@
 				<div id="bodyContent">
 					<address>${address}<br/>${tel}</address>
 				</div>
+				<button class="btnDirection" data-id="${id}">Get directions!</button>
 			</div>
 	</script>
 	<script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
-	<script src="scripts/jquery.ui.map.min.js"></script>
 </body>
 </html>
