@@ -22,10 +22,10 @@
 		<!-- content today -->
 		<header data-role="header" data-position="fixed" data-id="head">
 			<h1>Rooms & Lectures</h1>
-			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter">Filter</a>
-			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog">Info</a>
+			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter piwik_link">Filter</a>
+			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog" class="piwik_link">Info</a>
 			<h2>Today</h2>
-			<a href="#lecturesTomorrow" data-icon="arrow-r" data-iconpos="notext" class="ui-next" data-transition="slide">Next</a>
+			<a href="#lecturesTomorrow" data-icon="arrow-r" data-iconpos="notext" class="ui-next piwik_link" data-transition="slide">Next</a>
 		</header>
 		<div data-role="content">
 			<ul class="timeTable" data-filter="true"></ul>
@@ -33,8 +33,8 @@
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" class="ui-btn-active">Lectures</a></li>
-					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" class="ui-btn-active piwik_link">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLocations" href="#locations" class=" piwik_link">Locations</a></li>
 				</ul>
 			</div>
 		</footer>
@@ -42,11 +42,11 @@
 	<div id="lecturesTomorrow" data-role="page" data-id="head">
 		<header data-role="header">
 			<h1>Rooms & Lectures</h1>
-			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter">Filter</a>
-			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog">Info</a>
-			<a href="#lecturesToday" data-icon="arrow-l" data-iconpos="notext" class="ui-prev" data-transition="reverse slide">Previous</a>
+			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter piwik_link">Filter</a>
+			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog" class="piwik_link">Info</a>
+			<a href="#lecturesToday" data-icon="arrow-l" data-iconpos="notext" class="ui-prev" data-transition="reverse slide" class="piwik_link">Previous</a>
 			<h2>Tomorrow</h2>
-			<a href="#lecturesAll" data-icon="arrow-r" data-iconpos="notext" class="ui-next" data-transition="slide">Next</a>
+			<a href="#lecturesAll" data-icon="arrow-r" data-iconpos="notext" class="ui-next piwik_link" data-transition="slide">Next</a>
 		</header>
 		<div data-role="content">
 			<ul class="timeTable" data-filter="true"></ul>
@@ -54,8 +54,8 @@
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday">Lectures</a></li>
-					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" class="piwik_link">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLocations" href="#locations" class="piwik_link">Locations</a></li>
 				</ul>
 			</div>
 		</footer>
@@ -63,9 +63,9 @@
 	<div id="lecturesAll" data-role="page" data-id="head">
 		<header data-role="header">
 			<h1>Rooms & Lectures</h1>
-			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter">Filter</a>
-			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog">Info</a>
-			<a href="#lecturesTomorrow" data-icon="arrow-l" data-iconpos="notext" class="ui-prev" data-transition="reverse slide">Previous</a>
+			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter piwik_link">Filter</a>
+			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog" class="piwik_link">Info</a>
+			<a href="#lecturesTomorrow" data-icon="arrow-l" data-iconpos="notext" class="ui-prev piwik_link" data-transition="reverse slide">Previous</a>
 			<h2>All</h2>
 		</header>
 		<div data-role="content">
@@ -74,8 +74,8 @@
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday">Lectures</a></li>
-					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" class="piwik_link">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLocations" href="#locations" class="piwik_link">Locations</a></li>
 				</ul>
 			</div>
 		</footer>
@@ -92,7 +92,7 @@
 				<option value="3">MCI 4</option>
 				<option value="4">MCI 5</option>
 			</select>
-			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog" data-pos="right">Info</a>	
+			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog" data-pos="right" class="piwik_link">Info</a>	
 		</header>
 		<div data-role="content" style="padding:0;height:100%;width:100%;">
 			<div id="map_canvas"></div>
@@ -101,8 +101,8 @@
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" data-transition="reverse slide">Lectures</a></li>
-					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" data-transition="reverse slide" class="piwik_link">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLocations" href="#locations" class="piwik_link">Locations</a></li>
 				</ul>
 			</div>
 		</footer>
@@ -114,7 +114,7 @@
 		<div data-role="content">
 			<h2>MCI Application</h2>
 			<ul class="no-bullets">
-				<li><label>Version: </label>0.1</li>
+				<li><label>Version: </label>0.4</li>
 				<li><label>Date: </label>May 17, 2011</li>
 				<li><label>Author: </label>Markus Bürgler</li>
 				<li><label>Mail: </label><a href="mailto:markus.buergler@solito.at">m.buergler@solito.at</a></li>
@@ -125,7 +125,7 @@
 				Adamgasse 7<br />
 				6020 Innsbruck <br />
 				Austria<br />
-				<a href="http://www.solito.at">http://www.solito.at</a>
+				<a href="http://www.solito.at" class="piwik_link external">http://www.solito.at</a>
 			</address>
 			<blockquote>"ALL the web! The web for ALL!"</blockquote>
 			</p>
