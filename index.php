@@ -166,5 +166,18 @@
 			</div>
 	</script>
 	<script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
+	<!-- Piwik --> 
+	<script>
+		var pkBaseURL = (("https:" == document.location.protocol) ? "https://easyadmin.at/piwik/" : "http://easyadmin.at/piwik/");
+		document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script>
+		try {
+			var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+			piwikTracker.trackPageView();
+			piwikTracker.enableLinkTracking();
+		} catch( err ) {}
+	</script>
+	<!-- End Piwik Tracking Code -->
 </body>
 </html>
