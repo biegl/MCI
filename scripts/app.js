@@ -28,7 +28,7 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					'lat': 47.269208,
 					'lng': 11.398152,
 					'address': 'Universitätsstraße 15',
-					'tel': '+43 512 2070'
+					'tel': '0043 512 2070'
 				},
 				{
 					'id': 1,
@@ -36,7 +36,7 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					'lat': 47.269379,
 					'lng': 11.397084,
 					'address': 'Universitätsstraße 15',
-					'tel': '+43 512 2070'
+					'tel': '0043 512 2070'
 				},
 				{
 					'id': 2,
@@ -44,7 +44,7 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					'lat': 47.279148,
 					'lng': 11.397728,
 					'address': 'Weiherburggasse 8',
-					'tel': '+43 512 2070 3301'
+					'tel': '0043 512 2070 3301'
 				},
 				{
 					'id': 3,
@@ -52,7 +52,7 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					'lat': 47.255031,
 					'lng': 11.37935,
 					'address': 'Egger-Lienz-Straße 120',
-					'tel': '+43 512 2070 3200'
+					'tel': '0043 512 2070 3200'
 				},
 				{
 					'id': 4,
@@ -60,12 +60,12 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 					'lat': 47.2703,
 					'lng': 11.402942,
 					'address': 'Kapuzinergasse 9',
-					'tel': '+43 512 2070 1005'
+					'tel': '0043 512 2070 1005'
 				}
 			]
 		};		
 		
-		var app = {
+		app = {
 			init: function(){
 				var _self = this,
 						savedSettings = $.parseJSON(localStorage.getItem('settings'));
@@ -90,9 +90,20 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				
 				// Render initial schedule
 				$('body').delegate('div[data-role*="page"]', 'pageshow', function(){
-					_self.updateFilter(settings.filter);
+					if(!$(this).is('#locations')){
+						_self.updateFilter(settings.filter);
+					} else {
+						var val = $('#locations header select').val();
+						_self.initMap(val);
+					}
 				});
 				
+				$('body').delegate('div[data-role*="page"]','pagebeforeshow',function(){
+					var id = ($(this).attr('id') == 'locations') ? 'locations' : 'lecturesToday';
+					var button = $('footer a[href="#'+id+'"]',$(this)).addClass('ui-btn-active');
+				});
+				
+				// Swipe event for Rooms & lectures
 				$('body').delegate('div[data-role*="page"]:not("#locations")','swipeleft swiperight',function(e){
 					var direction = e.type;
 					if(direction == 'swiperight'){
@@ -101,18 +112,12 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 						$('header .ui-next',$(this)).click();
 					}
 				});
-				
-				// Init map
-				$('#btnLocations').live('click', function(event){
-					_self.initMap(settings.locations);
-				});
-				
-				// Get directions
-				$('body').delegate('#locations button','click',function(e){
-					var key = $(this).attr('data-id');
-					iw[key].close();
-					$.mobile.pageLoading();
-					_self.getDirections(settings.locations[key]);
+								
+				// Filter locations
+				$('#locations select').change(function(){
+					directionsDisplay.setDirections({'routes':[]})
+					var val = $(this).val();
+					_self.initMap(val);
 				});
 				
 				this.updateFilter(settings.filter);
@@ -261,7 +266,7 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 			 * Initialize google maps
 			 * @param locations: Array Location objects
 			 */
-			initMap: function(locations) {
+			initMap: function(locationKey) {
 				var ow = null;
 				var markers = [];
 				var map = null;
@@ -301,28 +306,35 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 				}
 				
 				function setMarkers(myLoc){
+					if(locationKey === 'all' || locationKey === null){
+						locations = settings.locations;
+					} else {
+						locations = [];
+						locations.push(settings.locations[locationKey]);
+					}
+				
 					$.each(locations,function(i,loc){
 						var text = $('#infoWindow').tmpl(loc).html();
 						var pos = new google.maps.LatLng(loc.lat,loc.lng);
 						
-						markers.push(new google.maps.Marker({
+						markers[loc.id] = new google.maps.Marker({
 							'position': pos,
 							'map': map,
 							'animation': google.maps.Animation.DROP,
 							'icon': image,
 							'shadow': shadow,
 							'title': loc.name
-							}));
+							});
 						
-						iw.push(new google.maps.InfoWindow({
+						iw[loc.id] = new google.maps.InfoWindow({
 							'content': text
-						}));
-						
-						google.maps.event.addListener(markers[i],'click',function(){
+						});
+					
+						google.maps.event.addListener(markers[loc.id],'click',function(){
 							$.each(iw,function(i,item){
 								this.close();
 							});
-							iw[i].open(map,markers[i]);
+							iw[loc.id].open(map,markers[loc.id]);
 						});
 					});
 					
@@ -332,12 +344,17 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 							'map': map,
 							'animation': google.maps.Animation.DROP,
 							'title': 'My location'
-						}))
+						}));
 					}
 				}		
 			},
-			getDirections: function(destination){
+			getDirections: function(dest){
 				if(navigator.geolocation){
+					var key = parseInt($(dest).attr('data-id'),10);
+					iw[key].close();
+					$.mobile.pageLoading();
+					var destination = settings.locations[key];
+									
 					navigator.geolocation.getCurrentPosition(function(pos){
 						var request = {
 							'origin': new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude),

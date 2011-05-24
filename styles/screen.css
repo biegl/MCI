@@ -31,3 +31,10 @@ footer .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-
 
 /*=== LOCATIONS ===*/
 #map_canvas{ width:100%; height:100%; }
+#locations .ui-header .ui-btn-left{ left:auto; right:10px; }
+#locations .ui-header .ui-select{ position: absolute; left:10px; top:0.25em; }
+
+#firstHeading{ margin:0 0 5px;}
+#bodyContent{ font-size:11px;}
+#bodyContent img{ display:block; float:left; margin: 0 5px 0 0; }
+#bodyContent address{}

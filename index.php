@@ -54,7 +54,7 @@
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" class="ui-btn-active">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday">Lectures</a></li>
 					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
 				</ul>
 			</div>
@@ -74,7 +74,7 @@
 		<footer data-role="footer" data-position="fixed" data-id="foot">
 			<div data-role="navbar">
 				<ul>
-					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" class="ui-btn-active">Lectures</a></li>
+					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday">Lectures</a></li>
 					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
 				</ul>
 			</div>
@@ -84,8 +84,15 @@
 		<!-- content today -->
 		<header data-role="header" data-position="fixed" data-id="head">
 			<h1>Locations</h1>
-			<a href="#filter" data-icon="search" data-rel="dialog" class="btnFilter">Filter</a>
-			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog">Info</a>	
+			<select id="selectLocation" data-inline="true" data-icon="search" data-theme="b">
+				<option value="all">All</option>
+				<option value="0">MCI 1</option>
+				<option value="1">MCI 2</option>
+				<option value="2">MCI 3</option>
+				<option value="3">MCI 4</option>
+				<option value="4">MCI 5</option>
+			</select>
+			<a href="#info" data-icon="info" data-iconpos="notext" data-rel="dialog" data-pos="right">Info</a>	
 		</header>
 		<div data-role="content" style="padding:0;height:100%;width:100%;">
 			<div id="map_canvas"></div>
@@ -95,7 +102,7 @@
 			<div data-role="navbar">
 				<ul>
 					<li><a data-icon="custom" id="btnLectures" href="#lecturesToday" data-transition="reverse slide">Lectures</a></li>
-					<li><a data-icon="custom" id="btnLocations" href="#locations" class="ui-btn-active">Locations</a></li>
+					<li><a data-icon="custom" id="btnLocations" href="#locations">Locations</a></li>
 				</ul>
 			</div>
 		</footer>
@@ -148,13 +155,14 @@
 			{{tmpl "#listEntry"}}
 	</script>
 	<script id="infoWindow" type="text/x-jquery-tmpl">
-			<div>
+			<div id="googleInfoWindow">
 				<div id="siteNotice"></div>
 				<h2 id="firstHeading" class="firstHeading">${name}</h2>
 				<div id="bodyContent">
+					<img src="images/locations/img0${id}.jpg" />
 					<address>${address}<br/>${tel}</address>
 				</div>
-				<button class="btnDirection" data-id="${id}">Get directions!</button>
+				<a data-id="${id}" onClick="app.getDirections(this)" class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow ui-btn-up-b"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Get directions!</span></span></a>
 			</div>
 	</script>
 	<script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
