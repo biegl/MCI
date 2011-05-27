@@ -252,11 +252,12 @@ Date.prototype.format=function(format){var returnStr='';var replace=Date.replace
 								$(this).remove();
 							} else {
 								var text = $(this).text(),
-										day = text.substring(0,2);
+										day = text.substr(0,2);
+										month = text.substr(3,2);
 										
 								date = text;
-								today.setDate(day);
-								$(this).text(today.format('l') + ' ' + text); 
+								today.setMonth(month-1,day);
+								$(this).text(today.format('l') + ' ' + text);
 							}
 						});
 					}
